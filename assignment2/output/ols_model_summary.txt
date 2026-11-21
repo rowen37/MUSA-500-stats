@@ -1,0 +1,22 @@
+
+Call:
+lm(formula = formula, data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.25817 -0.20391  0.03822  0.21743  2.24345 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 11.1137781  0.0465318 238.843  < 2e-16 ***
+PCTVACANT   -0.0191563  0.0009779 -19.590  < 2e-16 ***
+PCTSINGLES   0.0029770  0.0007032   4.234 2.42e-05 ***
+PCTBACHMOR   0.0209095  0.0005432  38.494  < 2e-16 ***
+LNNBELPOV   -0.0789035  0.0084567  -9.330  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3665 on 1715 degrees of freedom
+Multiple R-squared:  0.6623,	Adjusted R-squared:  0.6615 
+F-statistic: 840.9 on 4 and 1715 DF,  p-value: < 2.2e-16
+

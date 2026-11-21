@@ -1,0 +1,14 @@
+Homework 2 Part 1: OLS and spatial diagnostics
+Model: LNMEDHVAL ~ PCTVACANT + PCTSINGLES + PCTBACHMOR + LNNBELPOV
+Block groups: 1720
+Queen links (directed): 10524
+Log home value Moran's I = 0.793616 (positive-tail p = 0.001)
+OLS R-squared = 0.662300, adjusted = 0.661513, AIC = 1434.987, BIC = 1467.687
+OLS residual Moran's I = 0.313114 (positive-tail p = 0.001)
+Slope in descriptive residual-on-neighbor regression = 0.733336
+Permutation count = 999; reproducibility seed = 671
+Local Moran p-values are two-sided and unadjusted for multiple comparisons.
+All four OLS slopes are significant at 0.05 with conventional OLS standard errors.
+Heteroscedasticity and positive residual spatial dependence warrant caution about inference.
+The Jarque-Bera diagnostic also rejects normal errors.
+Use the shared Queen GAL with the processed polygons for the next spatial analyses.

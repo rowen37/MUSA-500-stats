@@ -1,0 +1,6 @@
+"Test","Statistic","Df","P_value","Null_hypothesis"
+"LM error (RSerr)",491.00701266648,1,0,"OLS residuals are spatially independent (error dependence)"
+"LM lag (RSlag)",930.585404538914,1,0,"OLS residuals are spatially independent (lag dependence)"
+"Robust LM error (adjRSerr)",1.52516842252216,1,0.216839029219571,"No error dependence beyond lag dependence"
+"Robust LM lag (adjRSlag)",441.103560294956,1,0,"No lag dependence beyond error dependence"
+"LM SARMA (error + lag)",932.110572961436,2,0,"No spatial dependence of either form"

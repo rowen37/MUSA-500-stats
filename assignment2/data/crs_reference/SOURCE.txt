@@ -1,0 +1,27 @@
+Reference geometry used in Fujia Zheng's GWR analysis
+
+Source: United States Census Bureau, 2010 TIGER/Line Shapefiles.
+Coverage: Philadelphia County, Pennsylvania (FIPS 42101).
+Boundary vintage: Census 2000 block groups, as represented in the 2010 release.
+Source URL: https://www2.census.gov/geo/tiger/TIGER2010/BG/2000/tl_2010_42101_bg00.zip
+Directory listing: https://www2.census.gov/geo/tiger/TIGER2010/BG/2000/
+Retrieved: 2026-11-11.
+SHA-256: 0c8724333d9a32eb42c7f2c34535022c32700439e462bd50a36de0a3dcc57c24
+
+The course shapefile does not identify its native CRS. Each of its 1,720
+AREAKEY values matches exactly one official BKGPIDFP00, and all course IDs
+are unique. The county reference contains 1,816 groups; the 96 outside
+the course sample are excluded. For GWR distances and the georeferenced
+map layer we use the official polygons matched to the course sample.
+The source .prj identifies geographic NAD83 (EPSG:4269); we transform the
+matched polygons to NAD83 / UTM zone 18N (EPSG:26918, metres) before
+computing their area centroids. These metro-area planar distances support
+the adaptive bandwidth calculations. The original outcomes, predictors,
+POLY_ID order and shared Queen weights remain those of the assignment.
+The original teaching geometries and Census release may differ slightly
+along boundaries; the match is by geography ID, not by vertex identity.
+
+From code/, run Rscript HW2_prepare_geography.R. Outputs:
+  data/gwr_reference_centroids.csv: POLY_ID, AREAKEY, x_m, y_m.
+  data/crs_reference/Philadelphia_analysis_bg.gpkg: matched Census polygons
+  with the same IDs, layer block_groups, EPSG:26918.

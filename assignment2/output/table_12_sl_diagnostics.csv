@@ -1,0 +1,5 @@
+"Test","Statistic","Df","P_value","Null_hypothesis"
+"Breusch-Pagan (classical)",210.912501811299,4,0,"Constant error variance"
+"Koenker-Bassett (studentized BP)",51.4244270957178,4,1.81985759795111e-10,"Constant error variance"
+"Jarque-Bera normality test",2760.11975318049,2,0,"Normally distributed errors"
+"Moran's I of SL residuals (999 permutations)",-0.0824192032536529,NA,0.002,"Spatial independence of residuals"

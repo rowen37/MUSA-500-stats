@@ -1,0 +1,9 @@
+"Item","Value"
+"Observations",1720
+"Missing values in model variables",0
+"Maximum difference: stored LNMEDHVAL vs log1p(MEDHVAL)",4.9951154323935e-12
+"Maximum difference: stored LNNBELPOV vs log1p(NBelPov100)",4.9853454697768e-12
+"Queen neighbor links (directed)",10524
+"Mean Queen neighbors",6.11860465116279
+"Block groups with zero neighbors",0
+"Queen subgraphs",2

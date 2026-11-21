@@ -1,0 +1,13 @@
+"Metric","Value"
+"N",1720
+"Spatial autoregressive parameter (lambda)",0.814872046155004
+"Lambda standard error",0.01637440342003
+"Lambda z value",49.7649914474569
+"Lambda p value (Wald test)",0
+"Log likelihood",-372.492533010252
+"AIC",758.985066020504
+"LR test vs OLS: statistic",678.001585684804
+"LR test vs OLS: df",1
+"LR test vs OLS: p value",0
+"OLS log likelihood (for reference)",-711.493325852654
+"OLS AIC (for reference)",1434.98665170531

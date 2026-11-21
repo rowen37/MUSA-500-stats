@@ -1,0 +1,30 @@
+
+Call:lagsarlm(formula = model_formula, data = model_data, listw = queenlist, 
+    zero.policy = TRUE)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-1.655518 -0.117238  0.018621  0.131940  1.726445 
+
+Type: lag 
+Coefficients: (asymptotic standard errors) 
+               Estimate  Std. Error  z value  Pr(>|z|)
+(Intercept)  3.89834648  0.20109015  19.3861 < 2.2e-16
+PCTVACANT   -0.00852676  0.00074357 -11.4673 < 2.2e-16
+PCTSINGLES   0.00202905  0.00051571   3.9345 8.338e-05
+PCTBACHMOR   0.00851569  0.00052192  16.3161 < 2.2e-16
+LNNBELPOV   -0.03406322  0.00629222  -5.4135 6.179e-08
+
+Rho: 0.65111, LR test value: 911.86, p-value: < 2.22e-16
+Asymptotic standard error: 0.018048
+    z-value: 36.076, p-value: < 2.22e-16
+Wald statistic: 1301.5, p-value: < 2.22e-16
+
+Log likelihood: -255.5617 for lag model
+ML residual variance (sigma squared): 0.071933, (sigma: 0.2682)
+Number of observations: 1720 
+Number of parameters estimated: 7 
+AIC: 525.12, (AIC for lm: 1435)
+LM test for residual autocorrelation
+test value: 67.727, p-value: 2.2204e-16
+

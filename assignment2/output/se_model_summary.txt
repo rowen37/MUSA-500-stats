@@ -1,0 +1,28 @@
+
+Call:errorsarlm(formula = model_formula, data = model_data, listw = queenlist, 
+    zero.policy = TRUE)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-1.926567 -0.115276  0.014885  0.133826  1.949100 
+
+Type: error 
+Coefficients: (asymptotic standard errors) 
+               Estimate  Std. Error  z value  Pr(>|z|)
+(Intercept) 10.90620342  0.05345565 204.0234 < 2.2e-16
+PCTVACANT   -0.00577991  0.00088663  -6.5190 7.078e-11
+PCTSINGLES   0.00266586  0.00062080   4.2942 1.753e-05
+PCTBACHMOR   0.00982427  0.00072894  13.4774 < 2.2e-16
+LNNBELPOV   -0.03453690  0.00708851  -4.8722 1.103e-06
+
+Lambda: 0.81487, LR test value: 678, p-value: < 2.22e-16
+Asymptotic standard error: 0.016374
+    z-value: 49.765, p-value: < 2.22e-16
+Wald statistic: 2476.6, p-value: < 2.22e-16
+
+Log likelihood: -372.4925 for error model
+ML residual variance (sigma squared): 0.076535, (sigma: 0.27665)
+Number of observations: 1720 
+Number of parameters estimated: 7 
+AIC: 758.99, (AIC for lm: 1435)
+

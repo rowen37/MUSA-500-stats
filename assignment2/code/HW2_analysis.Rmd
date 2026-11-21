@@ -1,0 +1,549 @@
+---
+title: "Homework 2 Spatial Autocorrelation and Spatial Regression"
+author: "Qiwen Bian, Manching Ho, Fujia Zheng"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+    keep_md: true
+    math_method: mathml
+---
+
+## Analysis configuration
+
+How much of the variation in median home value can four neighborhood
+characteristics explain across Philadelphia? We fit four models to the same
+1,720 block groups and compare their fit and the geographic structure left in
+their residuals. Fujia Zheng completed the geographically weighted regression
+and the final four-model comparison.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.align = "center", out.width = "90%"
+)
+
+# rmarkdown renders relative to the directory containing this file.
+project_root <- normalizePath("..")
+knitr::opts_knit$set(root.dir = project_root)
+
+# Keep absolute image paths absolute. The report is knitted from code/ but
+# written to ../output, so relative image paths are not found by pandoc.
+options(knitr.graphics.rel_path = FALSE)
+
+# Resolve every file in output/ from the project root, so the same path works
+# for knitr (root.dir), for pandoc (absolute), and for a plain Rscript run.
+out_path <- function(...) file.path(project_root, "output", ...)
+
+model_formula <-
+  LNMEDHVAL ~ PCTVACANT + PCTSINGLES + PCTBACHMOR + LNNBELPOV
+```
+
+## Packages
+
+```{r packages}
+required_part1 <- c("sf", "spdep", "lmtest")
+required_part2 <- c("spatialreg", "ggplot2", "patchwork")
+required_packages <- c(required_part1, required_part2)
+missing_packages <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
+if (length(missing_packages) > 0) {
+  stop("Missing packages: ", paste(missing_packages, collapse = ", "))
+}
+
+library(sf)
+library(spdep)
+library(lmtest)
+library(spatialreg)
+library(ggplot2)
+```
+
+## Data and model definition
+
+The analysis uses 1,720 Philadelphia Census block groups. The dependent
+variable is `LNMEDHVAL`, defined as `log(MEDHVAL + 1)`. The predictors are `PCTVACANT`, `PCTSINGLES`,
+`PCTBACHMOR`, and `LNNBELPOV`. The latter is defined as
+`log(NBelPov100 + 1)`.
+
+The global spatial models and all residual Moran diagnostics use the same
+row-standardized, first-order Queen weights in `data/RegressionData_queen.gal`.
+For GWR, local estimation uses distances between block-group centroids.
+The course shapefile does not identify its native coordinate reference system.
+We matched all 1,720 course AREAKEY identifiers one-to-one to Census 2000
+block groups, projected the matched polygons to NAD83 / UTM zone 18N
+(EPSG:26918), and calculated centroids in metres. The additional 96 county
+block groups in the reference file fall outside the course sample.
+The original Queen graph is used for every residual comparison.
+[U.S. Census Bureau boundary file](https://www2.census.gov/geo/tiger/TIGER2010/BG/2000/tl_2010_42101_bg00.zip)
+
+```{r data-preview}
+shapefile_path <- file.path(
+  "data", "map_RegressionData", "RegressionData.shp"
+)
+shp_preview <- st_read(shapefile_path, quiet = TRUE)
+stopifnot(nrow(shp_preview) == 1720)
+
+model_formula
+st_drop_geometry(shp_preview)[1:6, c(
+  "POLY_ID", "LNMEDHVAL", "PCTVACANT", "PCTSINGLES",
+  "PCTBACHMOR", "LNNBELPOV"
+)]
+```
+
+## Defining Queen neighbors
+
+The project retains one shared Queen GAL file so the OLS residual checks,
+Spatial Lag model, Spatial Error model, and GWR residual tests use the same
+neighbor definition.
+
+```{r run-part1, include=FALSE}
+source(file.path("code", "HW2_OLS_analysis.R"), local = new.env(parent = knitr::knit_global()))
+```
+
+```{r queen-weights}
+queen <- read.gal(
+  file.path("data", "RegressionData_queen.gal"),
+  region.id = as.character(shp_preview$POLY_ID)
+)
+queenlist <- nb2listw(queen, style = "W", zero.policy = TRUE)
+
+summary(card(queen))
+sum(card(queen) == 0)
+```
+
+## Part 1 spatial autocorrelation and OLS
+
+The reproducible Part 1 script performs the variable checks, global and local
+Moran analyses, OLS diagnostics, weighted-residual regression, residual Moran
+test, and handoff export.
+
+### Global Moran's I for LNMEDHVAL
+
+```{r response-moran-results}
+read.csv(out_path("table_02_global_moran_lnmedhval.csv"))
+knitr::include_graphics(c(
+  out_path("fig_01_moran_lnmedhval_scatter.png"),
+  out_path("fig_02_moran_lnmedhval_permutation.png")
+))
+```
+
+### Local Moran's I
+
+The global statistic is 0.794 with a one-sided permutation p-value of 0.001.
+Similar home values tend to cluster. At a local, unadjusted 5% threshold,
+282 block groups form high–high clusters and 332 form low–low clusters.
+Six are spatial outliers and 1,100 fall below the evidence threshold.
+The local tests use 999 conditional permutations without replacement.
+
+```{r lisa-results}
+read.csv(out_path("table_03_lisa_cluster_counts.csv"))
+knitr::include_graphics(c(
+  out_path("fig_03_lisa_significance_map.png"),
+  out_path("fig_04_lisa_cluster_map.png")
+))
+```
+
+### OLS regression and assumptions
+
+```{r ols-results}
+read.csv(out_path("table_04_ols_coefficients.csv"))
+read.csv(out_path("table_05_ols_fit_statistics.csv"))
+read.csv(out_path("table_06_ols_diagnostic_tests.csv"))
+
+knitr::include_graphics(c(
+  out_path("fig_05_ols_residuals_vs_fitted.png"),
+  out_path("fig_06_ols_residual_histogram.png")
+))
+```
+
+### Spatial autocorrelation in OLS residuals
+
+OLS explains 66.2% of the variation in log median home value. Three
+heteroscedasticity tests indicate unequal error variance, and the Jarque–Bera
+test rejects normality. The residuals retain substantial spatial structure
+(Moran’s I = 0.313, one-sided permutation p = 0.001). Neighboring block
+groups tend to have prediction errors in the same direction.
+
+```{r ols-residual-spatial-results}
+read.csv(file.path(
+  "output", "table_07_ols_residual_on_weighted_residual.csv"
+))
+read.csv(out_path("table_08_ols_residual_moran.csv"))
+
+knitr::include_graphics(c(
+  out_path("fig_07_ols_residual_vs_weighted_residual.png"),
+  out_path("fig_08_ols_residual_moran_scatter.png"),
+  out_path("fig_09_ols_residual_moran_permutation.png")
+))
+```
+
+## Part 2 Model selection diagnostics
+
+Both spatial models below are estimated on the same 1,720 block groups, the
+same dependent variable, the same four predictors, and the same
+row-standardized Queen weights as Part 1. The only thing that changes across
+OLS, Spatial Lag, and Spatial Error is how spatial dependence enters the
+equation, which makes the three sets of results directly comparable.
+
+Before fitting either model, the Lagrange Multiplier tests applied to the OLS
+residuals show which form of dependence dominates in this dataset.
+
+```{r part2-run, include=FALSE}
+source(
+  file.path("code", "HW2_SL_SE_analysis.R"),
+  local = knitr::knit_global()
+)
+```
+
+```{r lm-diagnostics}
+read.csv(out_path("table_09_lm_diagnostics_ols.csv"))
+```
+
+The plain LM statistics are both large, and the lag statistic
+(`r sprintf("%.3f", unname(lm_rs$RSlag$statistic))`) is almost twice the error
+statistic (`r sprintf("%.3f", unname(lm_rs$RSerr$statistic))`). The robust
+versions settle the choice: robust LM lag stays highly significant
+(`r sprintf("%.3f", unname(lm_rs$adjRSlag$statistic))`, p < 0.001), while robust
+LM error collapses to
+`r sprintf("%.3f", unname(lm_rs$adjRSerr$statistic))` with
+p = `r sprintf("%.3f", lm_rs$adjRSerr$p.value)`. In other words, once a lag term
+is allowed for, the residuals do not add independent evidence of error
+dependence. That points to the Spatial Lag model as the better specification,
+but the Spatial Error model is estimated and reported as well because both are
+part of the assignment and the two fit differently.
+
+## Part 2 Spatial Lag regression
+
+The Spatial Lag model adds a spatially lagged dependent variable to the OLS
+specification:
+
+$$y = X\beta + \rho Wy + \varepsilon$$
+
+where $Wy$ is the row-standardized Queen average of `LNMEDHVAL` in the
+neighbouring block groups and $\rho$ is the autoregressive coefficient on that
+average. The model is estimated by maximum likelihood with `lagsarlm`, so the
+coefficient standard errors account for the endogeneity that the lag term
+introduces.
+
+```{r sl-model-summary}
+cat(readLines(out_path("sl_model_summary.txt")), sep = "\n")
+```
+
+```{r sl-coefficients}
+read.csv(out_path("table_10_sl_coefficients.csv"))
+```
+
+```{r sl-fit-statistics}
+read.csv(out_path("table_11_sl_fit_statistics.csv"))
+```
+
+### Spatial Lag residual diagnostics
+
+```{r sl-diagnostics}
+read.csv(out_path("table_12_sl_diagnostics.csv"))
+```
+
+```{r sl-residual-figures, out.width = "88%"}
+knitr::include_graphics(c(
+  out_path("fig_10_sl_residual_map.png"),
+  out_path("fig_11_sl_residual_moran_scatter.png"),
+  out_path("fig_12_sl_residual_moran_permutation.png")
+))
+```
+
+```{r sl-implied-mean, include=FALSE}
+sl_xbar <- colMeans(model_data[, c("PCTVACANT", "PCTSINGLES",
+                                   "PCTBACHMOR", "LNNBELPOV")])
+sl_implied_mean <- (
+  coef(sl)["(Intercept)"] + sum(coef(sl)[names(sl_xbar)] * sl_xbar)
+) / (1 - sl_rho)
+```
+
+### Interpretation of the Spatial Lag model
+
+The lag parameter is large and precisely estimated:
+$\rho$ = `r sprintf("%.4f", sl_rho)` with a standard error of
+`r sprintf("%.4f", sl_rho_se)` and a Wald z of
+`r sprintf("%.2f", sl_rho_z)`, so a block group whose neighbours average one
+unit higher on logged median house value is expected to sit about
+`r sprintf("%.3f", sl_rho)` units higher itself, holding its own four
+characteristics constant. Housing value in Philadelphia is therefore not only a
+function of what is inside a block group; it is also a function of where the
+block group sits.
+
+All four predictors keep the same signs as in OLS, but their coefficients are
+smaller: `PCTVACANT` moves from
+`r sprintf("%.4f", coef(ols)["PCTVACANT"])` to
+`r sprintf("%.4f", coef(sl)["PCTVACANT"])`, `PCTBACHMOR` from
+`r sprintf("%.4f", coef(ols)["PCTBACHMOR"])` to
+`r sprintf("%.4f", coef(sl)["PCTBACHMOR"])`, and `LNNBELPOV` from
+`r sprintf("%.4f", coef(ols)["LNNBELPOV"])` to
+`r sprintf("%.4f", coef(sl)["LNNBELPOV"])`. These are structural slope
+parameters. Feedback between areas makes direct and indirect impacts depend
+on the spatial multiplier. With these row-standardized weights, a uniform
+one-unit increase across all areas gives a model-implied change of
+$\beta/(1-\rho)$: about
+`r sprintf("%.4f", coef(sl)["PCTVACANT"] / (1 - sl_rho))` for `PCTVACANT` and
+`r sprintf("%.4f", coef(sl)["PCTBACHMOR"] / (1 - sl_rho))` for `PCTBACHMOR`.
+Read that way, the substantive associations are not weaker than in OLS; the OLS
+coefficients were mixing a block group's own attributes with those of its
+neighbours. The much lower intercept
+(`r sprintf("%.2f", coef(sl)["(Intercept)"])` instead of
+`r sprintf("%.2f", coef(ols)["(Intercept)"])`) follows from the same mechanism:
+with $\rho$ carrying the city-wide level, the constant no longer has to stand
+for an average block group. If every block group had the sample-mean predictor
+values, the model would give each one the same expected log value,
+$(\alpha + \sum_k \beta_k \bar{x}_k)/(1-\rho)$, is
+`r sprintf("%.2f", sl_implied_mean)`, against a sample mean of
+`r sprintf("%.2f", mean(model_data$LNMEDHVAL))` for `LNMEDHVAL`.
+
+The fit statistics confirm the improvement. The log likelihood rises from
+`r sprintf("%.2f", ols_ll)` for OLS to `r sprintf("%.2f", as.numeric(logLik(sl)))`,
+AIC falls from `r sprintf("%.1f", ols_aic)` to `r sprintf("%.1f", AIC(sl))`, and
+the likelihood ratio test against OLS gives
+`r sprintf("%.1f", unname(sl_lr$statistic))` on one degree of freedom
+(p < 0.001). The Spatial Lag model is therefore a clear gain over the
+independence model.
+
+The residual diagnostics must be read as a mixed picture. The Breusch-Pagan
+statistic is still `r sprintf("%.1f", unname(sl_bp$statistic))` (p < 0.001)
+and the Koenker-Bassett version is still
+`r sprintf("%.1f", unname(sl_kb$statistic))` (p < 0.001), so the lag term
+absorbs dependence but not unequal error variance across block groups. The
+Jarque-Bera statistic of `r sprintf("%.0f", unname(sl_jb$statistic))` says the
+residuals remain heavy-tailed, which is expected given the extreme block
+groups visible in the map. Inference in this model rests on the asymptotic
+maximum-likelihood standard errors and should be read with that caveat.
+
+The Spatial Lag fit reduces the magnitude of residual spatial association
+and changes its direction. Its residual Moran's I is
+`r sprintf("%.4f", sl_moran_i)`, versus
+`r sprintf("%.4f", unname(ols_moran$statistic))` for OLS. The one-sided
+permutation test for positive autocorrelation now gives p =
+`r sprintf("%.3f", sl_moran_gt$p.value)`.
+The two-sided test still detects the small negative value (p =
+`r sprintf("%.3f", sl_moran$p.value)`). High and low errors tend to be adjacent
+slightly more often than the random-permutation benchmark would suggest.
+
+## Part 2 Spatial Error regression
+
+The Spatial Error model leaves the regression equation in its OLS form but
+allows the disturbance to be spatially correlated:
+
+$$y = X\beta + u, \qquad u = \lambda Wu + \varepsilon$$
+
+Here $\lambda$ is the autoregressive coefficient on the neighbour-averaged
+error, that is, the model attributes spatial dependence to unobserved factors
+that are shared among neighbouring block groups rather than to a spillover of
+the dependent variable itself. It is estimated with `errorsarlm` under the
+same maximum-likelihood framework.
+
+```{r se-model-summary}
+cat(readLines(out_path("se_model_summary.txt")), sep = "\n")
+```
+
+```{r se-coefficients}
+read.csv(out_path("table_13_se_coefficients.csv"))
+```
+
+```{r se-fit-statistics}
+read.csv(out_path("table_14_se_fit_statistics.csv"))
+```
+
+### Spatial Error residual diagnostics
+
+```{r se-diagnostics}
+read.csv(out_path("table_15_se_diagnostics.csv"))
+```
+
+```{r se-residual-figures, out.width = "88%"}
+knitr::include_graphics(c(
+  out_path("fig_13_se_residual_map.png"),
+  out_path("fig_14_se_residual_moran_scatter.png"),
+  out_path("fig_15_se_residual_moran_permutation.png")
+))
+```
+
+### Interpretation of the Spatial Error model
+
+The error parameter is strong: $\lambda$ = `r sprintf("%.4f", se_lambda)` with a
+standard error of `r sprintf("%.4f", se_lambda_se)` and a Wald z of
+`r sprintf("%.2f", se_lambda_z)`. A coefficient of that size means the
+unexplained part of a block group's housing value tracks the unexplained part
+of its neighbours' values. Shared, unmeasured neighborhood characteristics
+are a possible explanation. Identifying a specific omitted factor would
+require additional measurements.
+
+The predictor coefficients keep the OLS signs but move substantially toward
+zero: `PCTVACANT` from `r sprintf("%.4f", coef(ols)["PCTVACANT"])` to
+`r sprintf("%.4f", coef(se)["PCTVACANT"])`, `PCTBACHMOR` from
+`r sprintf("%.4f", coef(ols)["PCTBACHMOR"])` to
+`r sprintf("%.4f", coef(se)["PCTBACHMOR"])`, `LNNBELPOV` from
+`r sprintf("%.4f", coef(ols)["LNNBELPOV"])` to
+`r sprintf("%.4f", coef(se)["LNNBELPOV"])`. The intercept, unlike in the Spatial
+Lag model, stays close to the OLS value
+(`r sprintf("%.2f", coef(se)["(Intercept)"])` against
+`r sprintf("%.2f", coef(ols)["(Intercept)"])`), which is consistent with the
+error specification keeping the global mean rather than shifting it into a lag
+term. The shrinkage of the slopes is the substantive point: part of what looked
+like an effect of vacancy or education in OLS was really the spatially
+clustered context that both the predictor and the outcome share.
+
+Against OLS the improvement is again decisive. Log likelihood
+`r sprintf("%.2f", as.numeric(logLik(se)))` versus `r sprintf("%.2f", ols_ll)`,
+AIC `r sprintf("%.1f", AIC(se))` versus `r sprintf("%.1f", ols_aic)`, and the
+likelihood ratio test gives `r sprintf("%.1f", unname(se_lr$statistic))` on one
+degree of freedom (p < 0.001). It is nevertheless weaker than the Spatial Lag
+model on both criteria, which is discussed in the comparison below.
+
+The residual picture is more comfortable than for the Spatial Lag model on the
+heteroscedasticity side. The classical Breusch-Pagan statistic is
+`r sprintf("%.2f", unname(se_bp$statistic))` (p =
+`r sprintf("%.3f", se_bp$p.value)`), but the studentized Koenker-Bassett
+statistic is only `r sprintf("%.2f", unname(se_kb$statistic))` with p =
+`r sprintf("%.3f", se_kb$p.value)`, so the rejection of constant error
+variance is much less robust here than under OLS or Spatial Lag. Normality still
+fails (Jarque-Bera `r sprintf("%.0f", unname(se_jb$statistic))`, p < 0.001).
+
+The Spatial Error residuals show a small negative spatial association.
+Their Moran's I is
+`r sprintf("%.4f", se_moran_i)` (one-sided p for positive autocorrelation =
+`r sprintf("%.3f", se_moran_gt$p.value)`; two-sided p =
+`r sprintf("%.3f", se_moran$p.value)`), against
+`r sprintf("%.4f", unname(ols_moran$statistic))` for OLS. The error model also
+overshoots slightly, and by a marginally larger margin than the lag model.
+
+## Part 2 OLS, Spatial Lag and Spatial Error side by side
+
+```{r part2-comparison}
+read.csv(out_path("table_16_model_comparison_ols_sl_se.csv"))
+```
+
+Three things stand out. First, both spatial models beat OLS by an enormous
+margin: AIC drops from `r sprintf("%.1f", ols_aic)` to
+`r sprintf("%.1f", AIC(sl))` (lag) and `r sprintf("%.1f", AIC(se))` (error), and
+the likelihood ratio tests are overwhelming in both cases. Second, the Spatial
+Lag model is the better of the two, with the higher log likelihood, the lower
+AIC, and the robust LM diagnostics pointing the same way. Third, both models
+leave essentially the same faint negative residual autocorrelation
+(`r sprintf("%.3f", sl_moran_i)` versus `r sprintf("%.3f", se_moran_i)`, both
+two-sided p = `r sprintf("%.3f", sl_moran$p.value)`), so the choice between them
+does not hinge on residual autocorrelation.
+
+Among the two global spatial specifications, the fit and robust LM results
+favor Spatial Lag. The estimated association with neighboring home values
+admits several explanations, including shared neighborhood conditions.
+GWR allows the four slopes to vary across the city.
+
+## Part 3 Geographically Weighted Regression
+
+### Adaptive bandwidth and overall fit
+
+Fujia Zheng fitted the same four-predictor model at each block group.
+Each local fit gives larger weights to nearby observations. Its bandwidth
+is the distance to the selected nearest-neighbor rank, so the physical
+radius adapts to the density of block groups. The bandwidth search uses
+the corrected Akaike information criterion (AICc).
+
+```{r part3-run, include=FALSE}
+source(file.path("code", "HW2_GWR_analysis.R"), local = new.env(parent = knitr::knit_global()))
+gwr_fit <- read.csv(out_path("table_18_gwr_fit.csv"), check.names = FALSE)
+gwr_local <- read.csv(out_path("table_19_gwr_local_summary.csv"), check.names = FALSE)
+gwr_moran <- read.csv(out_path("table_20_gwr_moran.csv"), check.names = FALSE)
+```
+
+```{r gwr-fit-results}
+knitr::kable(data.frame(Statistic = names(gwr_fit), Value = as.numeric(gwr_fit[1, ])),
+             digits = 3, caption = "Adaptive GWR at the selected bandwidth")
+```
+
+### Local relationships and explanatory power
+
+The AICc search selected the 14th nearest other block group. That neighbor
+is typically 723 m away, ranging from 452 m to 3.72 km across the city.
+More distant groups retain progressively smaller Gaussian weights.
+
+The maps express local slopes in units of their estimated standard errors.
+A negative ratio indicates a negative local association after adjustment for
+the other three variables. Nearby estimates share observations, and scanning
+1,720 locations entails multiple comparisons. Interpret the maps as
+descriptions of geographic variation.
+
+```{r gwr-local-results}
+knitr::kable(gwr_local, digits = 3, caption = "Distribution of local regression results")
+knitr::include_graphics(c(out_path("fig_16_gwr_coefficient_se.png"),
+                          out_path("fig_17_gwr_local_r2.png")))
+```
+
+The bachelor's-degree coefficient is positive at all 1,720 locations. Its
+median is 0.0189 in the westernmost quarter of sampled block groups and
+0.0094 in the easternmost quarter. The singles coefficient even changes
+direction, with a median of +0.0058 in the northernmost quarter and −0.0061 in
+the southernmost quarter. These quarters are defined by centroid coordinates.
+Vacancy and poverty have negative slopes in 1,550 and 1,442 groups,
+respectively. Local R² ranges from 0.135 to 0.886, with a median of 0.634.
+The spatial variation helps explain why a citywide slope can conceal
+substantial neighborhood differences.
+
+### Residual spatial dependence
+
+```{r gwr-residual-results}
+knitr::kable(gwr_moran, digits = 4, caption = "Queen-weight residual Moran diagnostics, 999 permutations")
+knitr::include_graphics(c(out_path("fig_18_gwr_residual_map.png"),
+                          out_path("fig_19_gwr_residual_moran.png")))
+```
+
+GWR residual Moran’s I is 0.0342 (one-sided p = 0.010, two-sided p = 0.020).
+The remaining clustering is weak but detectable with the original Queen graph.
+
+## Model comparison
+
+We compare AIC on the same log-home-value outcome and all 1,720 observations.
+The residual diagnostic asks a separate question: how much neighborhood
+similarity remains after fitting? An absolute Moran's I closer to zero
+indicates weaker global residual association under the shared Queen weights.
+
+```{r final-model-comparison}
+common <- read.csv(out_path("table_16_model_comparison_ols_sl_se.csv"))
+four <- data.frame(
+  Model = c(common$Model, "Adaptive GWR"),
+  N = nrow(model_data),
+  AIC = c(common$AIC, gwr_fit$AIC),
+  AIC_course = c(common$AIC, gwr_fit$AIC_spgwr_eq4_22),
+  Residual_I = c(common$Residual_Moran_I, gwr_moran$I),
+  P_greater = c(common$Moran_p_greater, gwr_moran$P_greater),
+  P_two_sided = c(common$Moran_p_two_sided, gwr_moran$P_two_sided)
+)
+four$Delta_AIC <- four$AIC - min(four$AIC)
+write.csv(four, out_path("table_21_final_model_comparison.csv"), row.names = FALSE)
+knitr::kable(four, digits = 3, caption = "Model fit and residual spatial association")
+```
+
+Using the GWR AIC printed by the course's **spgwr** convention (equation
+4.22), **GWR** has the lowest AIC (`r sprintf("%.2f", gwr_fit$AIC_spgwr_eq4_22)`) and the smallest absolute residual
+Moran's I. The two AIC columns show why the penalty convention matters.
+For GWR, the course statistic uses −2 log likelihood + tr(S), where tr(S)
+is the effective number of fitted mean parameters. The other AIC column
+uses −2 log likelihood + 2[tr(S) + 1], counting the variance parameter
+and applying the usual Gaussian AIC penalty. AICc (`r sprintf("%.2f", gwr_fit$AICc)`) selected the
+GWR bandwidth. [spgwr model documentation](https://rsbivand.github.io/spgwr/reference/gwr.html)
+
+Under the common Gaussian AIC penalty the lowest AIC belongs to **`r four$Model[which.min(four$AIC)]`**
+(`r sprintf("%.2f", min(four$AIC))`). **`r four$Model[which.min(abs(four$Residual_I))]`**
+has the smallest absolute residual Moran's I
+(`r sprintf("%.4f", min(abs(four$Residual_I)))`). OLS explains
+`r sprintf("%.1f%%", 100 * summary(ols)$r.squared)` of the observed variation.
+The corresponding in-sample quasi-global measure for GWR is
+`r sprintf("%.1f%%", 100 * gwr_fit$R2)`. These fit statistics address
+observations used in estimation. Prediction in previously unseen neighborhoods
+would require a geographically held-out evaluation.
+
+## Session information
+
+```{r session-info}
+sessionInfo()
+```

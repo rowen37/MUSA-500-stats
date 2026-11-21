@@ -1,0 +1,5 @@
+"Test","Statistic","Df","P_value","Null_hypothesis"
+"Breusch-Pagan (classical)",113.189766941352,4,1.51893191948332e-23,"Constant error variance"
+"Koenker-Bassett (studentized BP)",42.8683533133516,4,1.10195913445886e-08,"Constant error variance"
+"White heteroscedasticity test",111.322401201651,14,3.09852597021154e-17,"Constant error variance"
+"Jarque-Bera normality test",778.964631319944,2,7.07912384269201e-170,"Normally distributed errors"

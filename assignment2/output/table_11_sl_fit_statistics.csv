@@ -1,0 +1,13 @@
+"Metric","Value"
+"N",1720
+"Spatial autoregressive parameter (rho)",0.651106684752972
+"Rho standard error",0.0180481936557355
+"Rho z value",36.0760027941111
+"Rho p value (Wald test)",5.39556090946017e-285
+"Log likelihood",-255.561691291003
+"AIC",525.123382582006
+"LR test vs OLS: statistic",911.863269123301
+"LR test vs OLS: df",1
+"LR test vs OLS: p value",0
+"OLS log likelihood (for reference)",-711.493325852654
+"OLS AIC (for reference)",1434.98665170531

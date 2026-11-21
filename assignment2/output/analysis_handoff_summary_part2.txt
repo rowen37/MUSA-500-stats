@@ -1,0 +1,38 @@
+Homework 2 Part 2 handoff summary
+
+Shared model: LNMEDHVAL ~ PCTVACANT + PCTSINGLES + PCTBACHMOR + LNNBELPOV
+Shared weights: data/RegressionData_queen.gal, row-standardised Queen
+
+LM error statistic: 491.007 (p = 0)
+LM lag statistic: 930.585 (p = 0)
+Robust LM error statistic: 1.525 (p = 0.217)
+Robust LM lag statistic: 441.104 (p = 0)
+
+Spatial Lag rho: 0.651107 (z = 36.076, p = 5.4e-285)
+Spatial Lag log likelihood: -255.5617; AIC: 525.1234
+Spatial Lag LR test vs OLS: 911.863 (df = 1, p = 0)
+Spatial Lag residual Moran's I: -0.082419 (999 permutations, two-sided p = 0.002, one-sided p = 1.000)
+
+Spatial Error lambda: 0.814872 (z = 49.765, p = 0)
+Spatial Error log likelihood: -372.4925; AIC: 758.9851
+Spatial Error LR test vs OLS: 678.002 (df = 1, p = 0)
+Spatial Error residual Moran's I: -0.094579 (999 permutations, two-sided p = 0.002, one-sided p = 1.000)
+
+OLS log likelihood: -711.4933; AIC: 1434.9867
+OLS residual Moran's I: 0.313114 (999 permutations, two-sided p = 0.002, one-sided p = 0.001)
+
+Interpretive handoff:
+Both spatial models dominate OLS on log likelihood and AIC.
+Every residual Moran's I changes from strongly positive under OLS to small
+and negative under both spatial models, so the positive spatial
+autocorrelation in the OLS residuals is absorbed by rho and lambda.
+The Spatial Lag model has the lower AIC and the higher log likelihood, and
+the robust LM diagnostics point to lag rather than error dependence, so SL
+is the preferred of the two Part 2 models.
+
+Reproduction note:
+Moran permutation tests use 999 permutations with set.seed(671).
+Residual Moran tests are reported two-sided because the spatial-model
+residuals have small negative autocorrelation; Part 1 reported a one-sided
+greater-than p-value for the OLS residuals. Each tail uses (count + 1)/1000.
+Two-sided p is twice the smaller tail probability, capped at one.

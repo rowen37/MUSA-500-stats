@@ -1,0 +1,3 @@
+"Model","RMSE"
+"Original four-predictor model",0.367388821073816
+"PCTVACANT + MEDHHINC model",0.44362306474107
