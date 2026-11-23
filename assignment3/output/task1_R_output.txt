@@ -1,0 +1,392 @@
+HW3 Task 1
+ R version 4.6.1 (2026-06-24) 
+gmodels version: 2.19.1 
+
+Dependent-variable distribution:
+ DRINKING_D   group     n proportion  percent
+          0 Non-DUI 40879  0.9426944 94.26944
+          1     DUI  2485  0.0573056  5.73056
+
+Predictor: FATAL_OR_M 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     39698 |      2297 |     41995 | 
+             |     0.971 |     0.924 |           | 
+-------------|-----------|-----------|-----------|
+           1 |      1181 |       188 |      1369 | 
+             |     0.029 |     0.076 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  167.5615     d.f. =  1     p =  2.522202e-38 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  166.0354     d.f. =  1     p =  5.434077e-38 
+
+ 
+
+Predictor: OVERTURNED 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     40267 |      2375 |     42642 | 
+             |     0.985 |     0.956 |           | 
+-------------|-----------|-----------|-----------|
+           1 |       612 |       110 |       722 | 
+             |     0.015 |     0.044 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  122.788     d.f. =  1     p =  1.551762e-28 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  121.0052     d.f. =  1     p =  3.81124e-28 
+
+ 
+
+Predictor: CELL_PHONE 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     40453 |      2457 |     42910 | 
+             |     0.990 |     0.989 |           | 
+-------------|-----------|-----------|-----------|
+           1 |       426 |        28 |       454 | 
+             |     0.010 |     0.011 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  0.162071     d.f. =  1     p =  0.6872569 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  0.09065262     d.f. =  1     p =  0.7633491 
+
+ 
+
+Predictor: SPEEDING 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     39618 |      2225 |     41843 | 
+             |     0.969 |     0.895 |           | 
+-------------|-----------|-----------|-----------|
+           1 |      1261 |       260 |      1521 | 
+             |     0.031 |     0.105 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  376.7808     d.f. =  1     p =  6.249562e-84 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  374.6039     d.f. =  1     p =  1.861184e-83 
+
+ 
+
+Predictor: AGGRESSIVE 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     22357 |      1569 |     23926 | 
+             |     0.547 |     0.631 |           | 
+-------------|-----------|-----------|-----------|
+           1 |     18522 |       916 |     19438 | 
+             |     0.453 |     0.369 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  67.60186     d.f. =  1     p =  2.00079e-16 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  67.2607     d.f. =  1     p =  2.378758e-16 
+
+ 
+
+Predictor: DRIVER1617 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     40205 |      2473 |     42678 | 
+             |     0.984 |     0.995 |           | 
+-------------|-----------|-----------|-----------|
+           1 |       674 |        12 |       686 | 
+             |     0.016 |     0.005 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  20.45167     d.f. =  1     p =  6.115619e-06 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  19.7097     d.f. =  1     p =  9.014275e-06 
+
+ 
+
+Predictor: DRIVER65PLUS 
+
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Col Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  43364 
+
+ 
+             | d$DRINKING_D 
+      d[[v]] |         0 |         1 | Row Total | 
+-------------|-----------|-----------|-----------|
+           0 |     36642 |      2366 |     39008 | 
+             |     0.896 |     0.952 |           | 
+-------------|-----------|-----------|-----------|
+           1 |      4237 |       119 |      4356 | 
+             |     0.104 |     0.048 |           | 
+-------------|-----------|-----------|-----------|
+Column Total |     40879 |      2485 |     43364 | 
+             |     0.943 |     0.057 |           | 
+-------------|-----------|-----------|-----------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  80.6047     d.f. =  1     p =  2.75703e-19 
+
+Pearson's Chi-squared test with Yates' continuity correction 
+------------------------------------------------------------
+Chi^2 =  79.9888     d.f. =  1     p =  3.765375e-19 
+
+ 
+
+Continuous predictor: PCTBACHMOR 
+Group means:
+       0        1 
+16.56986 16.61173 
+Group standard deviations:
+       0        1 
+18.21426 18.72091 
+
+	Welch Two Sample t-test
+
+data:  PCTBACHMOR by DRINKING_D
+t = -0.10842, df = 2777.5, p-value = 0.9137
+alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+95 percent confidence interval:
+ -0.7991398  0.7153982
+sample estimates:
+mean in group 0 mean in group 1 
+       16.56986        16.61173 
+
+
+Continuous predictor: MEDHHINC 
+Group means:
+       0        1 
+31483.05 31998.75 
+Group standard deviations:
+      0       1 
+16930.1 17810.5 
+
+	Welch Two Sample t-test
+
+data:  MEDHHINC by DRINKING_D
+t = -1.4053, df = 2763.9, p-value = 0.16
+alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+95 percent confidence interval:
+ -1235.2508   203.8544
+sample estimates:
+mean in group 0 mean in group 1 
+       31483.05        31998.75 
+
+
+Pearson correlation matrix:
+             FATAL_OR_M OVERTURNED CELL_PHONE  SPEEDING AGGRESSIVE DRIVER1617
+FATAL_OR_M     1.000000   0.033196   0.002160  0.081713  -0.011047  -0.002808
+OVERTURNED     0.033196   1.000000  -0.000990  0.059440   0.016439   0.003724
+CELL_PHONE     0.002160  -0.000990   1.000000 -0.003601  -0.025743   0.001485
+SPEEDING       0.081713   0.059440  -0.003601  1.000000   0.211525   0.016012
+AGGRESSIVE    -0.011047   0.016439  -0.025743  0.211525   1.000000   0.028429
+DRIVER1617    -0.002808   0.003724   0.001485  0.016012   0.028429   1.000000
+DRIVER65PLUS  -0.012512  -0.019501  -0.002717 -0.032854   0.015027  -0.020848
+PCTBACHMOR    -0.014652   0.009332  -0.001246 -0.000739   0.027122  -0.002636
+MEDHHINC      -0.018212   0.027921   0.002100  0.011787   0.043440   0.022877
+             DRIVER65PLUS PCTBACHMOR  MEDHHINC
+FATAL_OR_M      -0.012512  -0.014652 -0.018212
+OVERTURNED      -0.019501   0.009332  0.027921
+CELL_PHONE      -0.002717  -0.001246  0.002100
+SPEEDING        -0.032854  -0.000739  0.011787
+AGGRESSIVE       0.015027   0.027122  0.043440
+DRIVER1617      -0.020848  -0.002636  0.022877
+DRIVER65PLUS     1.000000   0.026190  0.050338
+PCTBACHMOR       0.026190   1.000000  0.477870
+MEDHHINC         0.050338   0.477870  1.000000
+
+HW3 Task 1: exploratory analysis handoff
+Source CSV: Logistic Regression Data.csv
+Rows in source data: 43364
+Rows with missing DRINKING_D: 0
+Missing values across the ten analysis variables: 0
+DUI: 2485 of 43364 non-missing outcomes (5.73%).
+
+Binary tables: predictor=1 counts; percentages are within DRINKING_D columns.
+Total percentages use all complete cases for that predictor and outcome.
+Tests: Pearson chi-square WITHOUT Yates correction; alpha = 0.05.
+FATAL_OR_M | Reject H0: associated with DUI status | p < 0.001
+OVERTURNED | Reject H0: associated with DUI status | p < 0.001
+CELL_PHONE | Do not reject H0: insufficient evidence of association | p = 0.6873
+SPEEDING | Reject H0: associated with DUI status | p < 0.001
+AGGRESSIVE | Reject H0: associated with DUI status | p < 0.001
+DRIVER1617 | Reject H0: associated with DUI status | p < 0.001
+DRIVER65PLUS | Reject H0: associated with DUI status | p < 0.001
+
+Continuous variables: two-sided Welch t-tests; difference = non-DUI mean minus DUI mean.
+PCTBACHMOR | Do not reject H0: insufficient evidence of a difference | p = 0.9137
+MEDHHINC | Do not reject H0: insufficient evidence of a difference | p = 0.1600
+
+Complete cases in the nine-predictor correlation matrix: 43364
+The largest absolute correlation is between PCTBACHMOR and MEDHHINC (r = 0.4779).
+No predictor pair has |r| > 0.8; this screen does not flag severe pairwise collinearity.
+For two binary variables, Pearson r equals the phi coefficient and is affected by category prevalence.
+This correlation screen does not prove that all regression assumptions hold.
+
+Missing values: each univariate test excludes missing predictor/outcome pairs.
+The original data are not edited; continuous predictors remain in their original units.
+PCTBACHMOR and MEDHHINC describe the crash location's 2000 Census block group, not the individual driver.
+Their group means are computed across crash records, so block groups are weighted by their observed crash counts.
+Task 2 should start from the same original CSV. Task 1 does not fit a logistic model.
+Keep all nine specified predictors for the assigned full model; do not select predictors using these bivariate p-values.
+CrossTable output generated with gmodels 2.19.1
+Binary CSV counts, column percentages and chi-square tests come directly from CrossTable return values.
+The exported test is CrossTable$chisq (uncorrected), not CrossTable$chisq.corr (Yates).
+p_display is formatted for reading; p_value retains the numerical result.
+R version: R version 4.6.1 (2026-06-24)
+
+Four CSV tables, task1_results.md and task1_handoff.txt written to: /Users/frankietotalbest/Documents/Codex/2026-10-13/zh/HW3_task1/output 

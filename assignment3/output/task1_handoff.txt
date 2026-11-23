@@ -1,0 +1,39 @@
+HW3 Task 1: exploratory analysis handoff
+Source CSV: Logistic Regression Data.csv
+Rows in source data: 43364
+Rows with missing DRINKING_D: 0
+Missing values across the ten analysis variables: 0
+DUI: 2485 of 43364 non-missing outcomes (5.73%).
+
+Binary tables: predictor=1 counts; percentages are within DRINKING_D columns.
+Total percentages use all complete cases for that predictor and outcome.
+Tests: Pearson chi-square WITHOUT Yates correction; alpha = 0.05.
+FATAL_OR_M | Reject H0: associated with DUI status | p < 0.001
+OVERTURNED | Reject H0: associated with DUI status | p < 0.001
+CELL_PHONE | Do not reject H0: insufficient evidence of association | p = 0.6873
+SPEEDING | Reject H0: associated with DUI status | p < 0.001
+AGGRESSIVE | Reject H0: associated with DUI status | p < 0.001
+DRIVER1617 | Reject H0: associated with DUI status | p < 0.001
+DRIVER65PLUS | Reject H0: associated with DUI status | p < 0.001
+
+Continuous variables: two-sided Welch t-tests; difference = non-DUI mean minus DUI mean.
+PCTBACHMOR | Do not reject H0: insufficient evidence of a difference | p = 0.9137
+MEDHHINC | Do not reject H0: insufficient evidence of a difference | p = 0.1600
+
+Complete cases in the nine-predictor correlation matrix: 43364
+The largest absolute correlation is between PCTBACHMOR and MEDHHINC (r = 0.4779).
+No predictor pair has |r| > 0.8; this screen does not flag severe pairwise collinearity.
+For two binary variables, Pearson r equals the phi coefficient and is affected by category prevalence.
+This correlation screen does not prove that all regression assumptions hold.
+
+Missing values: each univariate test excludes missing predictor/outcome pairs.
+The original data are not edited; continuous predictors remain in their original units.
+PCTBACHMOR and MEDHHINC describe the crash location's 2000 Census block group, not the individual driver.
+Their group means are computed across crash records, so block groups are weighted by their observed crash counts.
+Task 2 should start from the same original CSV. Task 1 does not fit a logistic model.
+Keep all nine specified predictors for the assigned full model; do not select predictors using these bivariate p-values.
+CrossTable output generated with gmodels 2.19.1
+Binary CSV counts, column percentages and chi-square tests come directly from CrossTable return values.
+The exported test is CrossTable$chisq (uncorrected), not CrossTable$chisq.corr (Yates).
+p_display is formatted for reading; p_value retains the numerical result.
+R version: R version 4.6.1 (2026-06-24)
