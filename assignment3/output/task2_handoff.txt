@@ -1,0 +1,31 @@
+HW3 Task 2: logistic regression handoff
+Source CSV: Logistic Regression Data.csv
+Rows in source data: 43364 ; rows used: 43364
+Both models start from the same original CSV used by Task 1 and use the same complete-case rows.
+Full model: DRINKING_D ~ FATAL_OR_M + OVERTURNED + CELL_PHONE + SPEEDING + AGGRESSIVE + DRIVER1617 + DRIVER65PLUS + PCTBACHMOR + MEDHHINC.
+Reduced model: the same minus PCTBACHMOR and MEDHHINC.
+Link: logit (binomial). Odds ratios = exp(beta). CIs: profile-likelihood confint(); Wald CIs also exported for a check.
+Model fit: McFadden pseudo-R2, null and residual deviance, AIC, BIC exported in table_06.
+Cut-off with the lowest misclassification rate: 0.50 (5.73% misclassified).
+ROC optimal cut-off (minimum distance to upper-left corner): 0.0636 (sensitivity 0.6608, specificity 0.5452).
+AUC = 0.6399 (95% CI 0.6286-0.6512, DeLong).
+AIC: full = 18359.63, reduced = 18360.47; the full model has the lower AIC.
+
+Significant predictors in the full model (alpha = 0.05):
+FATAL_OR_M | p < 0.001
+OVERTURNED | p < 0.001
+SPEEDING | p < 0.001
+AGGRESSIVE | p < 0.001
+DRIVER1617 | p < 0.001
+DRIVER65PLUS | p < 0.001
+MEDHHINC | p = 0.0365
+Not significant in the full model:
+CELL_PHONE | p = 0.8812
+PCTBACHMOR | p = 0.7750
+
+Reduced model AUC = 0.6345, so dropping the two block-group predictors also costs a little discrimination.
+
+Note: these are conditional associations in one model, not causal effects.
+The block-group variables describe the crash location, not the driver; their coefficients are not driver-level effects.
+DRINKING_D is rare (about 5.7%), so classification at any cut-off above the observed prevalence is weak; discuss this in the report.
+pROC 1.19.1 | R R version 4.6.1 (2026-06-24 ucrt)

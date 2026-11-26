@@ -1,0 +1,157 @@
+﻿HW3 Task 2
+ R version 4.6.1 (2026-06-24 ucrt) 
+Rows in source CSV: 43364 
+Rows used in the models (complete cases on DRINKING_D and nine predictors): 43364 
+DUI cases in the model data: 2485 of 43364 (5.73%)
+Rscript.exe : Type 'citation("pROC")' for a citation.
+所在位置 行:1 字符: 214
++ ... signment3"; & "E:\Upenn Program\R-4.6.1\bin\Rscript.exe" "code\02_log ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Type 'citation("pROC")' for a citation.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Attaching package: 'pROC'
+
+The following objects are masked from 'package:stats':
+
+    cov, smooth, var
+
+pROC version: 1.19.1 
+
+================ Full model: summary() ================
+
+Call:
+glm(formula = full_formula, family = binomial(link = "logit"), 
+    data = model_data)
+
+Coefficients:
+               Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -2.733e+00  4.588e-02 -59.563  < 2e-16 ***
+FATAL_OR_M    8.140e-01  8.381e-02   9.713  < 2e-16 ***
+OVERTURNED    9.289e-01  1.092e-01   8.509  < 2e-16 ***
+CELL_PHONE    2.955e-02  1.978e-01   0.149   0.8812    
+SPEEDING      1.539e+00  8.055e-02  19.107  < 2e-16 ***
+AGGRESSIVE   -5.969e-01  4.778e-02 -12.493  < 2e-16 ***
+DRIVER1617   -1.280e+00  2.931e-01  -4.367 1.26e-05 ***
+DRIVER65PLUS -7.747e-01  9.586e-02  -8.081 6.41e-16 ***
+PCTBACHMOR   -3.706e-04  1.296e-03  -0.286   0.7750    
+MEDHHINC      2.804e-06  1.341e-06   2.091   0.0365 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 19036  on 43363  degrees of freedom
+Residual deviance: 18340  on 43354  degrees of freedom
+AIC: 18360
+
+Number of Fisher Scoring iterations: 6
+
+Waiting for profiling to be done...
+
+================ Full model: beta, statistic, p, OR and 95% CI ================
+           term    beta     se       z      p     OR OR_low OR_high
+1   (Intercept) -2.7325 0.0459 -59.563 <0.001 0.0651 0.0595  0.0712
+2    FATAL_OR_M  0.8140 0.0838   9.713 <0.001 2.2569 1.9099  2.6531
+3    OVERTURNED  0.9289 0.1092   8.509 <0.001 2.5318 2.0346  3.1224
+4    CELL_PHONE  0.0296 0.1978   0.149 0.8812 1.0300 0.6835  1.4885
+5      SPEEDING  1.5390 0.0805  19.107 <0.001 4.6598 3.9741  5.4502
+6    AGGRESSIVE -0.5969 0.0478 -12.493 <0.001 0.5505 0.5010  0.6042
+7    DRIVER1617 -1.2803 0.2931  -4.367 <0.001 0.2780 0.1477  0.4711
+8  DRIVER65PLUS -0.7747 0.0959  -8.081 <0.001 0.4609 0.3800  0.5535
+9    PCTBACHMOR -0.0004 0.0013  -0.286 0.7750 0.9996 0.9971  1.0022
+10     MEDHHINC  0.0000 0.0000   2.091 0.0365 1.0000 1.0000  1.0000
+
+Full model fit summary:
+     n events null_deviance residual_deviance mcfadden_pseudo_r2   aic   bic
+ 43364   2485         19036             18340           0.036572 18360 18446
+
+================ Classification by cut-off (full model) ================
+   cutoff sensitivity specificity misclassification lowest
+1    0.02      0.9835      0.0581            0.8889  FALSE
+2    0.03      0.9807      0.0639            0.8835  FALSE
+3    0.05      0.7348      0.4691            0.5157  FALSE
+4    0.07      0.2213      0.9138            0.1259  FALSE
+5    0.08      0.1847      0.9386            0.1046  FALSE
+6    0.09      0.1682      0.9460            0.0986  FALSE
+7    0.10      0.1642      0.9482            0.0967  FALSE
+8    0.15      0.1042      0.9722            0.0775  FALSE
+9    0.20      0.0229      0.9954            0.0603  FALSE
+10   0.50      0.0016      0.9999            0.0573   TRUE
+Cut-off with the lowest misclassification rate: 0.5 (5.73% misclassified)
+
+================ ROC and AUC (full model) ================
+AUC: 0.6399  95% CI (DeLong): 0.6286 - 0.6512 
+Optimal cut-off (minimum distance to the upper-left corner): 0.0636 
+  sensitivity = 0.6608  specificity = 0.5452 
+null device 
+          1 
+ROC image written to output/fig_01_roc_curve.png
+
+================ Reduced model (no PCTBACHMOR, no MEDHHINC): summary() ================
+
+Call:
+glm(formula = reduced_formula, family = binomial(link = "logit"), 
+    data = model_data)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -2.65190    0.02753 -96.324  < 2e-16 ***
+FATAL_OR_M    0.80932    0.08376   9.662  < 2e-16 ***
+OVERTURNED    0.93978    0.10903   8.619  < 2e-16 ***
+CELL_PHONE    0.03107    0.19777   0.157    0.875    
+SPEEDING      1.54032    0.08053  19.128  < 2e-16 ***
+AGGRESSIVE   -0.59365    0.04775 -12.433  < 2e-16 ***
+DRIVER1617   -1.27158    0.29311  -4.338 1.44e-05 ***
+DRIVER65PLUS -0.76646    0.09576  -8.004 1.21e-15 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 19036  on 43363  degrees of freedom
+Residual deviance: 18344  on 43356  degrees of freedom
+AIC: 18360
+
+Number of Fisher Scoring iterations: 6
+
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+
+================ Reduced model: beta, statistic, p, OR and 95% CI ================
+          term    beta     se       z      p     OR OR_low OR_high
+1  (Intercept) -2.6519 0.0275 -96.324 <0.001 0.0705 0.0668  0.0744
+2   FATAL_OR_M  0.8093 0.0838   9.662 <0.001 2.2464 1.9011  2.6405
+3   OVERTURNED  0.9398 0.1090   8.619 <0.001 2.5594 2.0574  3.1557
+4   CELL_PHONE  0.0311 0.1978   0.157 0.8752 1.0316 0.6846  1.4907
+5     SPEEDING  1.5403 0.0805  19.128 <0.001 4.6661 3.9796  5.4573
+6   AGGRESSIVE -0.5936 0.0477 -12.433 <0.001 0.5523 0.5027  0.6062
+7   DRIVER1617 -1.2716 0.2931  -4.338 <0.001 0.2804 0.1490  0.4752
+8 DRIVER65PLUS -0.7665 0.0958  -8.004 <0.001 0.4647 0.3832  0.5579
+
+Reduced model AUC: 0.6345  lowest-misclassification cut-off: 0.5 
+
+================ AIC comparison ================
+AIC(full) = 18359.63   AIC(reduced) = 18360.47   difference = 0.8374 
+Lower AIC indicates the better model: Full model (nine predictors) 
+
+================ Coefficient comparison across models ================
+          term beta_full beta_reduced p_full p_reduced
+1   AGGRESSIVE   -0.5969      -0.5936 <0.001    <0.001
+2   CELL_PHONE    0.0296       0.0311 0.8812    0.8752
+3   DRIVER1617   -1.2803      -1.2716 <0.001    <0.001
+4 DRIVER65PLUS   -0.7747      -0.7665 <0.001    <0.001
+5   FATAL_OR_M    0.8140       0.8093 <0.001    <0.001
+6   OVERTURNED    0.9289       0.9398 <0.001    <0.001
+7     SPEEDING    1.5390       1.5403 <0.001    <0.001
+                     status
+1       significant in both
+2 not significant in either
+3       significant in both
+4       significant in both
+5       significant in both
+6       significant in both
+7       significant in both
+
+Tables 5-12, fig_01_roc_curve.png, task2_results.md and task2_handoff.txt written to: C:/Users/ASUS/Desktop/MUSA500_hw3/assignment3/output 
