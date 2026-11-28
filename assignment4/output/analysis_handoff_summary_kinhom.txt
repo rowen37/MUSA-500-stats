@@ -1,0 +1,11 @@
+HW4 Part C: population-based inhomogeneous K
+62 observed records; original Philadelphia polygon; EPSG:2272 (US survey feet).
+250-ft raster; sigma 5280 ft; boundary-normalized Gaussian smoothing.
+Grid cells without a ZIP match, filled from nearest ZIP: 0
+Integrated lambda: 62.00000000; point-intensity range: 7.264e-09 to 2.665e-08 per ft2
+99 plug-in Poisson simulations, seed 671; count range 46-77.
+Isotropic correction; renormalise=FALSE; min/max pointwise envelope, not simultaneous.
+Above envelope at positive band edges (ft): 
+Below envelope at positive band edges (ft): 
+Income zero in 19112 displayed as unavailable; zero population retained before smoothing.
+No causal inference, bandwidth validation, or direct measure of travel access is claimed.
