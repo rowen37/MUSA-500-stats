@@ -1,0 +1,18 @@
+Homework 4 Part B: Ripley's K-function analysis of farmers markets
+Markets: 62 | Study area: 3970679605 square feet (142.4 sq mi)
+Distance bands: beginning 0 ft, increment 2500 ft, 10 bands; K evaluated at 0-25000 ft
+Edge correction: Ripley isotropic (Kest default); uncorrected K exported for comparison
+Simulations: 99 CSR patterns in the same window, seed 671
+Reject CSR: K(d) exceeds the simulation envelope at every band edge from 2500 to 25000 ft (10 of 10 edges), so markets are clustered at all scales up to 25000 ft
+Global test: max standardised excursion = 18.357, simulation-based p = 0.010 (clustered)
+Observed K at 25000 ft = 3105046213 vs CSR 1963495408 ft^2; uncorrected K = 2297156789
+Reading the bands: K(d) above the simulated envelope at a given distance means
+more pairs than a random pattern would produce at that range, i.e. clustering;
+K(d) below the envelope means fewer pairs than random, i.e. regularity. The L(d)
+panel makes this easier: L(d) > 0 at short distances is the direct clustering signal.
+Coincident Reading Terminal pair kept in every run, matching Part A.
+Note: the 25000 ft outer band slightly exceeds spatstat's recommended range
+(22384 ft) for the Philadelphia window; the isotropic correction is still
+defined there, and the uncorrected K is exported in fig_05 for comparison.
+Part C: use the same window, band edges and seed; the L(d) table is exported as
+data/processed_kfunc/kfunction_values.csv for the discussion figures.
