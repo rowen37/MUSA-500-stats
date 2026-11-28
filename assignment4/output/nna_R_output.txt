@@ -1,0 +1,3 @@
+Warning message:
+data contain duplicated points 
+Part A (NNA) complete: 62 markets, R = 0.778 , one-sided p = 0.000412 

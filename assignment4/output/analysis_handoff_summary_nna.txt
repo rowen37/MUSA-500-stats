@@ -1,0 +1,16 @@
+Homework 4 Part A: nearest neighbor analysis of farmers markets
+Markets: 62 | Study area: 3970679605 square feet (142.4 sq mi)
+Intensity: 1.561e-08 markets per square foot (0.4353 per square mile)
+Observed mean NND = 3112.9 ft (0.590 mi); CSR expectation = 4001.4 ft
+Course formula (no edge correction): R = 0.7780, z = -3.345, one-sided p = 0.000412
+spatstat Clark-Evans (CDF correction): R = 0.7091, one-sided p = 5.882e-06
+Monte Carlo: 99 CSR simulations, seed 671, p = 0.0100
+Sensitivity without the coincident Reading Terminal pair: mean = 3258.6 ft, R = 0.8144
+Coincident address: Reading Terminal Market / Fair Food Farmstand @ RTM at 12th St and Arch St (kept as two distinct markets).
+The course-formula rows match what ArcGIS Average Nearest Neighbor reports
+with the city boundary as the study area; add its screenshot as fig_03b if a
+license becomes available. R is well below 1, so both tests reject CSR and
+conclude significant clustering at alpha = 0.05.
+Parts B and C: read the shared data/processed_prepare/markets_ppp.Rds and
+city_owin.Rds (window in feet, seed 671, 99 simulations) so all parts use the
+same window, and keep the coincident pair in every K-function run.
